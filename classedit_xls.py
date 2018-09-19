@@ -24,7 +24,8 @@ DELIMITER_6 = "："
 
 DELIMITER_7 = "("
 DELIMITER_8 = ")"
-#分割体育课
+DELIMITER_9 = "-"
+#分割万恶的体育课
 #示例：「 大学体育1◇2节/周(1-16)[7-8节]」
 
 UID = "1234567890abcdefghijklmnopqrstuvwxyz\
@@ -113,7 +114,7 @@ for i in range(0, 3):
 	start_list[4+4*i] = plus_50(start_list[3+4*i])
 	for l in range(1,5):
 		end_list[l+4*i] = plus_45(start_list[l+4*i])
-#推算每节课的时间
+#推算每节课的时间，注意这个list储存的是小课时间
 
 
 def uid_born():
@@ -132,8 +133,10 @@ def classedit_xls(data_slice_1, y, x):
 	name = data_slice_1[0]
 	name = " ".join(name.split())  #去掉课程名字前的空格
 	week = week_list[x-1]		
+	
 	ver_2 = 1
 	ver_3 = 1
+	#两个验证变量，ver_2为地点，ver_3为描述（教师）
 	try:
 		location = data_slice_1[2]
 	except:
@@ -143,6 +146,7 @@ def classedit_xls(data_slice_1, y, x):
 	except:
 		ver_3 = 0
 	#验证是否有地点和教师
+	#给体育课留的，体育课已经单独分出了函数，现在看了并没有什么卵用（摊手）
 
 	data_slice_2 = data_slice_1[1].split(DELIMITER_2)
 		
@@ -152,12 +156,13 @@ def classedit_xls(data_slice_1, y, x):
 			
 		start_week = int(data_slice_3[0+2*i]) - 1
 		duration_week = int(data_slice_3[1+2*i]) - start_week
+		#计算每节课起始周与持续周数
 		
-		start_lesson = plus_week(start_list[y-2], start_week)
-		start_lesson = plus_day(start_lesson, x-2)
-		end_lesson = plus_45(start_lesson)
+		start_lesson = plus_week(start_list[y*2-5], start_week)  #计算每节大课开始时间
+		start_lesson = plus_day(start_lesson, x-2)  #计算每节课在一周中的偏移
+		end_lesson = plus_50(plus_45(start_lesson))  #计算每节大课下课时间
 		start_lesson = start_lesson.strftime("%Y%m%dT%H%M%S")
-		end_lesson = end_lesson.strftime("%Y%m%dT%H%M%S")
+		end_lesson = end_lesson.strftime("%Y%m%dT%H%M%S")  #格式化时间
 
 		write_text.append("BEGIN:VEVENT")
 		write_text.append("UID:" + uid_born() + "@github.com/smilonely")
@@ -181,38 +186,34 @@ def class_pe_edit (data_slice_1, y, x):
 
 	name = data_slice_1[0]
 	name = " ".join(name.split())  #去掉课程名字前的空格
-	print (name)
 	week = week_list[x-1]
 
 	data_slice_2 = data_slice_1[1].split(DELIMITER_8)
 	data_slice_2 = data_slice_2[0].split(DELIMITER_7)
-
-	loop = data_slice_1[1].count(DELIMITER_3)
-
-	for i in range(0, loop):
-		data_slice_3 = re.split(DELIMITER_4, data_slice_2[1])
+	data_slice_2 = data_slice_2[1].split(DELIMITER_9)
+	#最后分割出体育课的开始周与结束周
+	#实际上并没有什么卵用，看起来所有体育课都是1-16周
 			
-		start_week = int(data_slice_3[0+2*i]) - 1
-		duration_week = int(data_slice_3[1+2*i]) - start_week
+	start_week = int(data_slice_2[0]) - 1
+	duration_week = int(data_slice_2[1]) - start_week
 		
-		start_lesson = plus_week(start_list[y-2], start_week)
-		start_lesson = plus_day(start_lesson, x-2)
-		end_lesson = plus_45(start_lesson)
-		start_lesson = start_lesson.strftime("%Y%m%dT%H%M%S")
-		end_lesson = end_lesson.strftime("%Y%m%dT%H%M%S")
+	start_lesson = plus_week(start_list[y*2-5], start_week)
+	start_lesson = plus_day(start_lesson, x-2)
+	end_lesson = plus_50(plus_45(start_lesson))
+	start_lesson = start_lesson.strftime("%Y%m%dT%H%M%S")
+	end_lesson = end_lesson.strftime("%Y%m%dT%H%M%S")
 
-		write_text.append("BEGIN:VEVENT")
-		write_text.append("UID:" + uid_born() + "@github.com/smilonely")
-		write_text.append("DTSTART;TZID=Asia/Shanghai:" + start_lesson)
-		write_text.append("DTEND;TZID=Asia/Shanghai:" + end_lesson)
-		write_text.append("RRULE:FREQ=WEEKLY;WKST=SU;COUNT=" + \
-			str(duration_week) + ";BYDAY=" + week)
-		write_text.append("STATUS:CONFIRMED")
-		write_text.append("SUMMARY:" + name)
-		write_text.append("TRANSP:OPAQUE")
-		write_text.append("END:VEVENT\r\n")
-		print (list(write_text))
-#粗暴地复制了一遍上面的函数
+	write_text.append("BEGIN:VEVENT")
+	write_text.append("UID:" + uid_born() + "@github.com/smilonely")
+	write_text.append("DTSTART;TZID=Asia/Shanghai:" + start_lesson)
+	write_text.append("DTEND;TZID=Asia/Shanghai:" + end_lesson)
+	write_text.append("RRULE:FREQ=WEEKLY;WKST=SU;COUNT=" + \
+		str(duration_week) + ";BYDAY=" + week)
+	write_text.append("STATUS:CONFIRMED")
+	write_text.append("SUMMARY:" + name)
+	write_text.append("TRANSP:OPAQUE")
+	write_text.append("END:VEVENT\r\n")
+#抓体育课
 
 
 data_raw = xlrd.open_workbook("1.xls")
@@ -257,6 +258,7 @@ for x in range(2, 9):
 		number = data.count(DELIMITER_1)
 		#数一数分隔符
 		data_slice = re.split(DELIMITER_0, data)
+		#将一个单元格的内容连同换行符分割
 		
 		if number == 0:
 			continue
@@ -271,12 +273,11 @@ for x in range(2, 9):
 			#将多个EVENT合并并写入
 
 		if number == 1:		
-			print (data_slice)
 			class_pe_edit(data_slice, y, x)
 			write_done = "\r\n".join(write_text)
 			new_ics.write(write_done)
 
-		else:
+		if number == 3:
 			classedit_xls(data_slice, y, x)
 			write_done = "\r\n".join(write_text)
 			new_ics.write(write_done)
