@@ -41,7 +41,7 @@
 ### 使用说明
 
 1. [点击这里](https://raw.githubusercontent.com/smilonely/ClassCatch/master/classedit_xls.exe)，下载`classedit_xls.exe`文件
-2. 将xls课程表更名为`1.xls`，放在与同目录下
+2. 将 `.xls `课程表更名为`1.xls`，放在与同目录下
 3. 运行`classedit_xls.exe`，按提示输入信息
 4. 稍等片刻，不出意外的话`.ics`文件将出现在同目录下
 
