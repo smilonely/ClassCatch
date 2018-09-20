@@ -4,11 +4,15 @@
 
 **项目思路：抓取课程表之后生成日历文件`.ics`，之后可以导入设备的系统日历，抛弃全是广告的「超级课程表」之流。**
 
-## 关于 .ics 文件
+  
+
+## 关于 `.ics` 文件
 
 `ics` 是 iCalendar 文件的后缀名，iCalendar 是「日历数据交换」的标准。
 
 总而言之，有了它你可以很方便地将事件和提醒导入系统日历应用。
+
+  
 
 ### 什么是 iCalendar
 
@@ -16,9 +20,14 @@
 
 - 墙内请看 [百度百科](https://baike.baidu.com/link?url=CNXZUdK4xnc-CCnlnwDgpxSZBvZaMaEQ3KkOlxndmvTEIpQ5kyichBHqcOEj8yUMB4MLC7JsH7hFs6b-Biy0rEYqV5GRH0dQkK0I8MriGy7)
 
+    
+
 
 - [这里](https://www.jianshu.com/p/8f8572292c58) 有关于 iCalendar 的语法说明
+
 - [这里](https://icalendar.org/) 是 iCalendar 组织的主页
+
+    
 
 ### 我的设备如何导入 iCalendar
 
@@ -34,7 +43,7 @@
 
 [一个思路](https://zhuanlan.zhihu.com/p/35300266) 提供参考。
 
-
+  
 
 ## 开始课程表抓取（xls 版本）
 
@@ -47,6 +56,8 @@
 
 现在你就可以将`.ics`文件导入你的日历了。
 
+  
+
 ### 运行环境
 
 `Windows 10`（已测试）
@@ -56,6 +67,8 @@
 不支持`macOS`、`OSX`及`Linux`
 
 这两个系统的小伙伴动手能力强的可以拿源码试试
+
+  
 
 ### 其他说明
 
@@ -72,11 +85,11 @@ import time
 import datetime
 import random
 import string
-import re
-import os
 import codecs
 ```
 
+  
 
+  
 
 欢迎与我友好地讨论交流~
