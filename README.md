@@ -20,7 +20,7 @@
 - [这里](https://www.jianshu.com/p/8f8572292c58)有关于 iCalendar 的语法说明
 - [这里](https://icalendar.org/)是 iCalendar 组织的主页
 
-### 我的手机如何导入 iCalendar
+### 我的设备如何导入 iCalendar
 
 #### `Windows 10`
 
