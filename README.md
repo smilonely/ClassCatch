@@ -29,7 +29,7 @@
 
   </br>
 
-### 我的设备如何导入 iCalendar
+### 我的设备如何导入 `.ics`
 
 #### `Windows 10`
 
@@ -42,6 +42,10 @@
 #### `iOS`和`Andriod`
 
 [一个思路](https://zhuanlan.zhihu.com/p/35300266) 提供参考。
+
+</br>
+
+可以搜索关键字，「『你的设备名字』+如何导入 ics」。
 
 </br>
 
