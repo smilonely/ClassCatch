@@ -1,16 +1,19 @@
-# coding=utf-8
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
+import os
 import xlrd  #编辑xls
 import time  #时间戳相关
 import datetime  #Datetime相关
 import random  #生成随机数
 import string  #生成随机UID相关
 import re  #多字符分割字符相关
-import os
-import codecs
+import codecs  #使用utf-8编码
+import xlrd  #编辑xls
 
-DELIMITER_0 = "◇|\n"
-DELIMITER_1 = "◇"  #用于各个部分的分割
+
+DELIMITER_0 = "◇|\n"#用于各个部分的分割
+DELIMITER_1 = "◇"  #用来计数
 DELIMITER_2 = "("  #分割周数与课程节次
 DELIMITER_3 = ","  #分割课程节次（然并卵），主要是用于分析单个Slice有几个周区间
 DELIMITER_4 = "-|,"  #分割周区间
