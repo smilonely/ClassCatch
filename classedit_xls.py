@@ -9,7 +9,6 @@ import random  #生成随机数
 import string  #生成随机UID相关
 import re  #多字符分割字符相关
 import codecs  #使用utf-8编码
-import xlrd  #编辑xls
 
 
 DELIMITER_0 = "◇|\n"#用于各个部分的分割
@@ -32,13 +31,13 @@ DELIMITER_9 = "-"
 #示例：「 大学体育1◇2节/周(1-16)[7-8节]」
 
 UID = "1234567890abcdefghijklmnopqrstuvwxyz\
-ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*"
+ABCDEFGHIJKLMNOPQRSTUVWXYZ!$%#&*"
 #UID备选列表
 
 def begin_time():
     ver = 0
     while ver == 0:
-    #循环检查输入是否有误，ver为1为有误，1为正确
+    #循环检查输入是否有误，ver为0为有误，1为正确
         ver = 1
 
         try:
@@ -67,25 +66,42 @@ start_list = [i for i in range(0, 13)]
 end_list = [i for i in range(0, 13)]
 #课程结束时间list
 
-print ("\r\n请输入第一周星期一上午第一节课上课日期和时间\r\n")
-print ("（无论第一节有没有课），\r\n")
-print ("格式为「年-月-日-时-分」（24小时制，不足两位请补0），\r\n")
-print ("例如：2001-01-01-09-59。\r\n")
-print ("请输入：\r\n")
+
+ver_4 = 0
+
+while ver_4 == 0:
+    ver_4 = 1
+    try:
+        data_raw = xlrd.open_workbook("1.xls")
+    except:
+        print (
+            "\r\n未检测到课程表文件，\r\n"
+            "请检查通目录下是否存在「1.xls」，\r\n"
+            "请在检查确认后按回车键继续。")
+        ver_4 = 0
+        input()
+#验证是否有课程表文件，ver为0为有误，1为正确
+
+
+print (
+    "\r\n请输入第一周星期一上午第一节课上课日期和时间\r\n"
+    "（无论第一节有没有课），\r\n"
+    "格式为「年-月-日-时-分」（24小时制，不足两位请补0），\r\n"
+    "例如：2001-01-01-09-59。\r\n"
+    "请输入：\r\n")
 start_list[1] = begin_time()
-#start_list[1] = datetime.datetime.strptime("2018-09-10-08-30", "%Y-%m-%d-%H-%M")
 
-print ("\r\n好的！下面再输入星期一下午第一节课的上课日期和时间，\r\n")
-print ("也就是第五节课，\r\n")
-print ("格式相同。\r\n")
+print (
+    "\r\n好的！下面再输入星期一下午第一节课的上课日期和时间，\r\n"
+    "也就是第五节课，\r\n"
+    "格式相同。\r\n")
 start_list[5] = time_verification(begin_time(), 1)
-#start_list[5] = datetime.datetime.strptime("2018-09-10-13-40", "%Y-%m-%d-%H-%M")
 
-print ("\r\n最后，再输入星期一晚上第一节课的上课日期和时间，\r\n")
-print ("我没记错的话，应该就是第九节课，\r\n")
-print ("格式依然相同。\r\n")
+print (
+    "\r\n最后，再输入星期一晚上第一节课的上课日期和时间，\r\n"
+    "我没记错的话，应该就是第九节课，\r\n"
+    "格式依然相同。\r\n")
 start_list[9] = time_verification(begin_time(), 5)
-#start_list[9] = datetime.datetime.strptime("2018-09-10-18-20", "%Y-%m-%d-%H-%M")
 
 print("\r\n好的，请稍等……\r\n")
 
@@ -113,11 +129,11 @@ for i in range(0, 3):
 
 
 def uid_born():
-        uid_list = []
-        for i in range(0,20):
-                uid_list.append(random.choice(UID))
-                uid = "".join(uid_list)
-        return uid
+    uid_list = []
+    for i in range(0,20):
+        uid_list.append(random.choice(UID))
+        uid = "".join(uid_list)
+    return uid
 #随机生成UID
 
 
@@ -159,25 +175,27 @@ def classedit_xls(data_slice_1, y, x):
         start_lesson = start_lesson.strftime("%Y%m%dT%H%M%S")
         end_lesson = end_lesson.strftime("%Y%m%dT%H%M%S")  #格式化时间
 
-        write_text.append("BEGIN:VEVENT")
-        write_text.append("UID:" + uid_born() + "@github.com/smilonely")
-        write_text.append("DTSTART;TZID=Asia/Shanghai:" + start_lesson)
-        write_text.append("DTEND;TZID=Asia/Shanghai:" + end_lesson)
-        write_text.append("RRULE:FREQ=WEEKLY;WKST=SU;COUNT=" + \
+        write_text.append(
+            "BEGIN:VEVENT"
+            "UID:" + uid_born() + "@github.com/smilonely"
+            "DTSTART;TZID=Asia/Shanghai:" + start_lesson,
+            "DTEND;TZID=Asia/Shanghai:" + end_lesson,
+            "RRULE:FREQ=WEEKLY;WKST=SU;COUNT=" + \
             str(duration_week) + ";BYDAY=" + week)
         if ver_2 == 1:
             write_text.append("LOCATION:" + location)
         if ver_3 == 1:
             write_text.append("DESCRIPTION:" + description)
-        write_text.append("STATUS:CONFIRMED")
-        write_text.append("SUMMARY:" + name)
-        write_text.append("TRANSP:OPAQUE")
-        write_text.append("BEGIN:VALARM")
-        write_text.append("ACTION:DISPLAY")
-        write_text.append("DESCRIPTION:This is an event reminder")
-        write_text.append("TRIGGER:-P0DT0H15M0S")
-        write_text.append("END:VALARM")
-        write_text.append("END:VEVENT\r\n")
+        write_text.append(
+            "STATUS:CONFIRMED"
+            "SUMMARY:" + name,
+            "TRANSP:OPAQUE"
+            "BEGIN:VALARM"
+            "ACTION:DISPLAY"
+            "DESCRIPTION:This is an event reminder"
+            "TRIGGER:-P0DT0H15M0S"
+            "END:VALARM"
+            "END:VEVENT\r\n")
 #添加一个EVENT的内容进list write_text，但是不合并
 
 
@@ -203,20 +221,25 @@ def class_pe_edit (data_slice_1, y, x):
     start_lesson = start_lesson.strftime("%Y%m%dT%H%M%S")
     end_lesson = end_lesson.strftime("%Y%m%dT%H%M%S")
 
-    write_text.append("BEGIN:VEVENT")
-    write_text.append("UID:" + uid_born() + "@github.com/smilonely")
-    write_text.append("DTSTART;TZID=Asia/Shanghai:" + start_lesson)
-    write_text.append("DTEND;TZID=Asia/Shanghai:" + end_lesson)
-    write_text.append("RRULE:FREQ=WEEKLY;WKST=SU;COUNT=" + \
-        str(duration_week) + ";BYDAY=" + week)
-    write_text.append("STATUS:CONFIRMED")
-    write_text.append("SUMMARY:" + name)
-    write_text.append("TRANSP:OPAQUE")
-    write_text.append("END:VEVENT\r\n")
+    write_text.append(
+        "BEGIN:VEVENT"
+        "UID:" + uid_born() + "@github.com/smilonely"
+        "DTSTART;TZID=Asia/Shanghai:" + start_lesson,
+        "DTEND;TZID=Asia/Shanghai:" + end_lesson,
+        "RRULE:FREQ=WEEKLY;WKST=SU;COUNT=" + \
+        str(duration_week) + ";BYDAY=" + week,
+        "STATUS:CONFIRMED"
+        "SUMMARY:" + name,
+        "TRANSP:OPAQUE"
+        "BEGIN:VALARM"
+        "ACTION:DISPLAY"
+        "DESCRIPTION:This is an event reminder"
+        "TRIGGER:-P0DT0H15M0S"
+        "END:VALARM"
+        "END:VEVENT\r\n")
 #抓体育课
 
 
-data_raw = xlrd.open_workbook("1.xls")
 table = data_raw.sheets()[0]
 class_name = table.cell(1, 0).value
 class_name = class_name.split(DELIMITER_5)
@@ -227,26 +250,26 @@ semester = table.cell(1, 7).value
 
 new_ics = codecs.open(class_name + "课程表.ics", "w", "utf-8")
 new_ics.write(
-"BEGIN:VCALENDAR\r\n"
-"VERSION:2.0\r\n"
-"PRODID:-//DANGEL//Class Schedule//CN\r\n"
-"NAME:" + semester + "课程表\r\n"
-"X-WR-CALNAME:" + semester + "课程表\r\n"
-"DESCRIPTION:" + class_name + "班" + semester + "课程表\r\n"
-"X-WR-CALDESC:" + class_name + "班" + semester + "课程表\r\n"
-"CALSCALE:GREGORIAN\r\n"
-"METHOD:PUBLISH\r\n"
-"X-WR-TIMEZONE:Asia/Shanghai\r\n"
-"BEGIN:VTIMEZONE\r\n"
-"TZID:Asia/Shanghai\r\n"
-"X-LIC-LOCATION:Asia/Shanghai\r\n"
-"BEGIN:STANDARD\r\n"
-"TZOFFSETFROM:+0800\r\n"
-"TZOFFSETTO:+0800\r\n"
-"TZNAME:CST\r\n"
-"DTSTART:19700101T000000\r\n"
-"END:STANDARD\r\n"
-"END:VTIMEZONE\r\n\r\n")
+    "BEGIN:VCALENDAR\r\n"
+    "VERSION:2.0\r\n"
+    "PRODID:-//DANGEL//Class Schedule//CN\r\n"
+    "NAME:" + semester + "课程表\r\n"
+    "X-WR-CALNAME:" + semester + "课程表\r\n"
+    "DESCRIPTION:" + class_name + "班" + semester + "课程表\r\n"
+    "X-WR-CALDESC:" + class_name + "班" + semester + "课程表\r\n"
+    "CALSCALE:GREGORIAN\r\n"
+    "METHOD:PUBLISH\r\n"
+    "X-WR-TIMEZONE:Asia/Shanghai\r\n"
+    "BEGIN:VTIMEZONE\r\n"
+    "TZID:Asia/Shanghai\r\n"
+    "X-LIC-LOCATION:Asia/Shanghai\r\n"
+    "BEGIN:STANDARD\r\n"
+    "TZOFFSETFROM:+0800\r\n"
+    "TZOFFSETTO:+0800\r\n"
+    "TZNAME:CST\r\n"
+    "DTSTART:19700101T000000\r\n"
+    "END:STANDARD\r\n"
+    "END:VTIMEZONE\r\n\r\n")
 #写入各项信息
 
 write_text = []
