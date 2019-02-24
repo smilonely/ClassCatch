@@ -53,9 +53,9 @@
 
 ### 使用说明
 
-1. [点击这里](https://raw.githubusercontent.com/smilonely/ClassCatch/master/ClassEdit-表格导入版.exe)，下载`ClassEdit 表格导入版.exe`程序
+1. [点击这里](https://raw.githubusercontent.com/smilonely/ClassCatch/master/CurriculumEditor.exe)，下载`CurriculumEditor.exe`程序
 2. 将你的 Excel 文件课程表 `.xls `文件重命名为`1.xls`，放在与程序相同目录下
-3. 运行`ClassEdit 表格导入版`，按提示输入信息
+3. 运行`CurriculumEditor.exe`，按提示输入信息
 4. 稍等片刻，不出意外的话`.ics`文件将出现在同目录下
 
 现在你就可以将`.ics`文件导入你的日历了。
@@ -66,7 +66,7 @@
 
 现在每一个事项都默认加入了提醒通知，考虑到大课间隔是 15 分钟，所以提醒时间设置为提前 15 分钟。暂时不支持自定义（主要是我懒还没来得及写）。
 
-如果不需要提醒可以下载 [老版本](https://raw.githubusercontent.com/smilonely/ClassCatch/master/classedit_xls.exe)，操作方法相同。
+如果不需要提醒可以下载 [老版本](https://raw.githubusercontent.com/smilonely/ClassCatch/master/CurriculumEditor_old.exe)，操作方法相同。
 
 <br />
 
@@ -88,7 +88,7 @@
 
   欢迎给我反馈 bug 。
 
-- 项目源代码包含在`classedit_xls.py`中
+- 项目源代码包含在`CurriculumEditor.py`中
 - 项目所使用的模块：
 
 ```
