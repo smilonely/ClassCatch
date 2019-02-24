@@ -161,12 +161,15 @@ def classedit_xls(data_slice_1, y, x):
 
     data_slice_2 = data_slice_1[1].split(DELIMITER_2)
         
-    loop = data_slice_1[1].count(DELIMITER_3)
-    for i in range(0, loop):
+    loop = data_slice_2[0].count(DELIMITER_3) + 1
+    for i in range(loop):
         data_slice_3 = re.split(DELIMITER_4, data_slice_2[0])
             
-        start_week = int(data_slice_3[0+2*i]) - 1
-        duration_week = int(data_slice_3[1+2*i]) - start_week
+        start_week = int(data_slice_3[2*i]) - 1
+        try:
+        	duration_week = int(data_slice_3[1+2*i]) - start_week
+        except:
+        	duration_week = 1
         #计算每节课起始周与持续周数
         
         start_lesson = plus_week(start_list[y*2-5], start_week)  #计算每节大课开始时间
@@ -283,9 +286,9 @@ for x in range(2, 9):
         if number == 0:
             continue
 
-        if number > 3:
-            for k in range(0, number//3):
-                data_slice_0 = data_slice[0+4*k:4+4*k]
+        if number > 4:
+            for k in range(0, number//4):
+                data_slice_0 = data_slice[5*k:5+5*k]
                 classedit_xls(data_slice_0, y, x)
 
             write_done = "\r\n".join(write_text)
@@ -297,7 +300,7 @@ for x in range(2, 9):
             write_done = "\r\n".join(write_text)
             new_ics.write(write_done)
 
-        if number == 3:
+        if number == 4:
             classedit_xls(data_slice, y, x)
             write_done = "\r\n".join(write_text)
             new_ics.write(write_done)
@@ -313,5 +316,5 @@ new_ics.close()
 
 
 
-print ("\r\n完成了！\r\n")
+print ("\r\n完成了！请核对导出 ics 是否正确。\r\n")
 input()

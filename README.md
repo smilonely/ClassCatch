@@ -66,8 +66,6 @@
 
 现在每一个事项都默认加入了提醒通知，考虑到大课间隔是 15 分钟，所以提醒时间设置为提前 15 分钟。暂时不支持自定义（主要是我懒还没来得及写）。
 
-如果不需要提醒可以下载 [老版本](https://raw.githubusercontent.com/smilonely/ClassCatch/master/CurriculumEditor_old.exe)，操作方法相同。
-
 <br />
 
 ### 运行环境
